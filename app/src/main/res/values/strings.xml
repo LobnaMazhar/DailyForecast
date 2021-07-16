@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Daily Forecast</string>
+    <string name="failed_to_get_location">Failed to get current location</string>
+</resources>
