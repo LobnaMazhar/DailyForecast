@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Daily Forecast</string>
+    <string name="image_url">https://openweathermap.org/img/wn/%s.png</string>
     <string name="failed_to_get_location">Failed to get current location</string>
+    <string name="today">Today</string>
+    <string name="temperature_unit">°C</string>
+    <string name="pressure">Pressure</string>
+    <string name="pressure_unit">hPa</string>
+    <string name="humidity">Humidity</string>
+    <string name="humidity_unit">%</string>
+    <string name="speed">Speed</string>
+    <string name="speed_unit">m/s</string>
+    <string name="clouds">Clouds</string>
 </resources>

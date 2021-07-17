@@ -1,35 +1,20 @@
-package lobna.parentaps.daily.forecast
+package lobna.parentaps.daily.forecast.utils
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.TransitionDrawable
-import android.text.format.DateUtils
-import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.ContextThemeWrapper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import lobna.parentaps.daily.forecast.R
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 object Utilities {
@@ -126,6 +111,4 @@ object Utilities {
             null
         }
     }
-
-
 }

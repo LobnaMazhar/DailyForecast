@@ -1,4 +1,4 @@
-package lobna.parentaps.daily.forecast
+package lobna.parentaps.daily.forecast.utils
 
 import android.graphics.drawable.Drawable
 import android.text.TextWatcher
@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import lobna.parentaps.daily.forecast.R
 
 
 object BindingAdapters {
@@ -40,7 +41,8 @@ object BindingAdapters {
             R.drawable.ic_placeholder_img
         )
         if (!url.isNullOrBlank())
-            Glide.with(imageView).load(url).placeholder(icon).centerCrop().into(imageView)
+            Glide.with(imageView).load(imageView.context.getString(R.string.image_url, url))
+                .placeholder(icon).centerCrop().into(imageView)
         else imageView.setImageDrawable(icon)
     }
 

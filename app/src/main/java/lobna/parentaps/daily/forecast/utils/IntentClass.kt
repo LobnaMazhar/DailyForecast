@@ -1,4 +1,4 @@
-package lobna.parentaps.daily.forecast
+package lobna.parentaps.daily.forecast.utils
 
 import android.app.Activity
 import android.content.Context
