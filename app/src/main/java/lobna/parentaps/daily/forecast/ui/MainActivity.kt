@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.requestPermissionClick.observe(this, { requestPermission() })
 
-        mainViewModel.detectLocation(fusedLocationClient)
+        mainViewModel.init(fusedLocationClient)
     }
 
     private fun requestPermission() {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mainViewModel.detectLocation(fusedLocationClient)
             } else {
-                mainViewModel.setLocation()
+                mainViewModel.getData(saveCity = true)
             }
         }
     }

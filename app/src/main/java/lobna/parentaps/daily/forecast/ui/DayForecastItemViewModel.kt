@@ -2,11 +2,11 @@ package lobna.parentaps.daily.forecast.ui
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import lobna.parentaps.daily.forecast.data.ForecastResponse
+import lobna.parentaps.daily.forecast.data.DailyForecast
 import lobna.parentaps.daily.forecast.utils.DateUtils
 import kotlin.math.roundToInt
 
-class DayForecastItemViewModel(val item: ForecastResponse.DailyForecast) {
+class DayForecastItemViewModel(val item: DailyForecast) {
 
     val isTodayObservable = ObservableBoolean(DateUtils.isToday(item.dt))
     val dateObservable = ObservableField(DateUtils.formatDate(item.dt))

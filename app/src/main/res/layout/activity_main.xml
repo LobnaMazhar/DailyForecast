@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:loadImage="http://schemas.android.com/tools"
     xmlns:recycler="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -11,18 +12,64 @@
             type="lobna.parentaps.daily.forecast.ui.MainViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentInsetEnd="@dimen/margin_padding_size_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/margin_padding_size_micro"
+                        android:onClick="@{mvm::selectCity}"
+                        android:text="@{mvm.cityObservable.name}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
+                        android:textSize="@dimen/text_size_title"
+                        app:drawableEndCompat="@drawable/ic_arrow_down" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_padding_size_medium"
+                        android:onClick="@{()->mvm.favourite()}"
+                        loadImage:src="@{mvm.isFavouriteObservable() ? @drawable/ic_star : @drawable/ic_star_border, default=@drawable/ic_star_border}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{mvm::search}"
+                        android:src="@drawable/ic_search" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             recycler:adapter="@{mvm.dayForecastAdapter}"
             tools:itemCount="5"
             tools:listitem="@layout/item_day_forecast" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
