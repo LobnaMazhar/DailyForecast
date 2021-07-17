@@ -9,7 +9,7 @@
 
         <variable
             name="dfivm"
-            type="lobna.parentaps.daily.forecast.ui.DayForecastItemViewModel" />
+            type="lobna.parentaps.daily.forecast.ui.home.DayForecastItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

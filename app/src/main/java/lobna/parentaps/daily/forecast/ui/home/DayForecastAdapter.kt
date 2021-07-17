@@ -1,4 +1,4 @@
-package lobna.parentaps.daily.forecast.ui
+package lobna.parentaps.daily.forecast.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import lobna.parentaps.daily.forecast.R
 import lobna.parentaps.daily.forecast.data.DailyForecast
-import lobna.parentaps.daily.forecast.data.ForecastResponse
 import lobna.parentaps.daily.forecast.databinding.ItemDayForecastBinding
 
 class DayForecastAdapter(private val items: ArrayList<DailyForecast>) :

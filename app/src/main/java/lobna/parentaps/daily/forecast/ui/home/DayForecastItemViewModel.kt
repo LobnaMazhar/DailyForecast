@@ -1,4 +1,4 @@
-package lobna.parentaps.daily.forecast.ui
+package lobna.parentaps.daily.forecast.ui.home
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField

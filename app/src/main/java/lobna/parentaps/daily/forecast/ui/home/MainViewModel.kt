@@ -1,4 +1,4 @@
-package lobna.parentaps.daily.forecast.ui
+package lobna.parentaps.daily.forecast.ui.home
 
 import android.app.AlertDialog
 import android.app.Application
@@ -20,7 +20,10 @@ import lobna.parentaps.daily.forecast.data.DailyForecast
 import lobna.parentaps.daily.forecast.data.ForecastResponse
 import lobna.parentaps.daily.forecast.data.OpenWeatherResponse
 import lobna.parentaps.daily.forecast.repository.OpenWeatherRepository
+import lobna.parentaps.daily.forecast.ui.CityAdapter
+import lobna.parentaps.daily.forecast.ui.CityInterface
 import lobna.parentaps.daily.forecast.utils.LocationUtils
+import lobna.parentaps.daily.forecast.utils.Utilities.showToast
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,6 +34,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val dayForecastAdapter = DayForecastAdapter(days)
 
     val requestPermissionClick = MutableLiveData<Boolean>()
+    val searchClick = MutableLiveData<Boolean>()
 
     fun init(fusedLocationClient: FusedLocationProviderClient) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,6 +85,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 Toast.makeText(getApplication(), response.message, Toast.LENGTH_LONG).show()
             is OpenWeatherResponse.DataResponse<*> -> {
                 (response.data as? ForecastResponse)?.run {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        isFavouriteObservable.set(
+                            OpenWeatherRepository.ifCityExists(getApplication(), city.id)
+                        )
+                    }
                     cityObservable.set(city)
                     if (saveCity) favourite()
 
@@ -116,15 +125,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun favourite() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (isFavouriteObservable.get())
+            if (isFavouriteObservable.get()) {
                 OpenWeatherRepository.deleteCity(getApplication(), cityObservable.get()!!)
-            else
-                OpenWeatherRepository.saveCity(getApplication(), cityObservable.get()!!)
-            isFavouriteObservable.set(!isFavouriteObservable.get())
+                isFavouriteObservable.set(false)
+            } else {
+                val response =
+                    OpenWeatherRepository.saveCity(getApplication(), cityObservable.get()!!)
+
+                withContext(Dispatchers.Main) {
+                    when (response) {
+                        is OpenWeatherResponse.ErrorResponse ->
+                            getApplication<Application>().showToast(response.message)
+                        is OpenWeatherResponse.ExceptionResponse ->
+                            response.message?.run { getApplication<Application>().showToast(this) }
+                        is OpenWeatherResponse.DataResponse<*> -> isFavouriteObservable.set(true)
+                    }
+                }
+            }
         }
     }
 
     fun search(view: View) {
-
+        searchClick.postValue(true)
     }
 }

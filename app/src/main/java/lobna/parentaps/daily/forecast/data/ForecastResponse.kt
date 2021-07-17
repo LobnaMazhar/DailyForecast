@@ -10,11 +10,6 @@ data class ForecastResponse(
     val list: List<DailyForecast>
 )
 
-
-data class ForecastModel(
-    val id: Int
-)
-
 @Entity
 data class CityModel(
     @PrimaryKey val id: Int,

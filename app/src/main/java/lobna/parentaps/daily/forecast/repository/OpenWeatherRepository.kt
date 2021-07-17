@@ -3,6 +3,7 @@ package lobna.parentaps.daily.forecast.repository
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import lobna.parentaps.daily.forecast.R
 import lobna.parentaps.daily.forecast.data.CityModel
 import lobna.parentaps.daily.forecast.data.OpenWeatherResponse
 import lobna.parentaps.daily.forecast.database.MyRoomDatabase
@@ -14,8 +15,13 @@ object OpenWeatherRepository : OpenWeatherInterface {
     private var weatherApi: WeatherApiInterface =
         MyRetrofitClient.createService(WeatherApiInterface::class.java)
 
-    override suspend fun saveCity(context: Context, city: CityModel) {
-        MyRoomDatabase.invoke(context).openWeather().insertCity(city)
+    override suspend fun saveCity(context: Context, city: CityModel): OpenWeatherResponse {
+        return if (getCount(context) == 5)
+            OpenWeatherResponse.ErrorResponse(0, context.getString(R.string.reached_max))
+        else {
+            MyRoomDatabase.invoke(context).openWeather().insertCity(city)
+            OpenWeatherResponse.DataResponse(true)
+        }
     }
 
     override suspend fun getCities(context: Context): List<CityModel> {
@@ -28,6 +34,25 @@ object OpenWeatherRepository : OpenWeatherInterface {
 
     override suspend fun deleteCity(context: Context, city: CityModel) {
         MyRoomDatabase.invoke(context).openWeather().deleteCity(city)
+    }
+
+    override suspend fun getCount(context: Context): Int {
+        return MyRoomDatabase.invoke(context).openWeather().getCount()
+    }
+
+    override suspend fun getCities(city: String): OpenWeatherResponse {
+        return try {
+            val response = weatherApi.cityList(city)
+
+            if (response.isSuccessful) {
+                OpenWeatherResponse.DataResponse(response.body())
+            } else {
+                OpenWeatherResponse.ErrorResponse(response.code(), response.message())
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) { e.printStackTrace() }
+            OpenWeatherResponse.ExceptionResponse(e.message)
+        }
     }
 
     override suspend fun getDailyForecast(

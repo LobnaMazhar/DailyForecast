@@ -20,4 +20,7 @@ interface OpenWeatherDao {
 
     @Delete
     suspend fun deleteCity(city: CityModel)
+
+    @Query("Select COUNT(id) from CityModel")
+    suspend fun getCount(): Int
 }

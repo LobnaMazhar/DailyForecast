@@ -9,13 +9,13 @@
 
         <variable
             name="mvm"
-            type="lobna.parentaps.daily.forecast.ui.MainViewModel" />
+            type="lobna.parentaps.daily.forecast.ui.home.MainViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        tools:context=".ui.home.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

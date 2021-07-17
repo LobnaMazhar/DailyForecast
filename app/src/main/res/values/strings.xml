@@ -11,4 +11,6 @@
     <string name="speed">Speed</string>
     <string name="speed_unit">m/s</string>
     <string name="clouds">Clouds</string>
+    <string name="reached_max">You have reached maximum number of favourite cities</string>
+    <string name="search_city">Search City</string>
 </resources>
