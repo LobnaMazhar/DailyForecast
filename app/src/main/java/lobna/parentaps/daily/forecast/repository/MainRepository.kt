@@ -10,7 +10,7 @@ import lobna.parentaps.daily.forecast.database.MyRoomDatabase
 import lobna.parentaps.daily.forecast.network.MyRetrofitClient
 import lobna.parentaps.daily.forecast.network.WeatherApiInterface
 
-object OpenWeatherRepository : OpenWeatherInterface {
+object MainRepository : MainInterface {
 
     private var weatherApi: WeatherApiInterface =
         MyRetrofitClient.createService(WeatherApiInterface::class.java)
@@ -40,21 +40,6 @@ object OpenWeatherRepository : OpenWeatherInterface {
         return MyRoomDatabase.invoke(context).openWeather().getCount()
     }
 
-    override suspend fun getCities(city: String): OpenWeatherResponse {
-        return try {
-            val response = weatherApi.cityList(city)
-
-            if (response.isSuccessful) {
-                OpenWeatherResponse.DataResponse(response.body())
-            } else {
-                OpenWeatherResponse.ErrorResponse(response.code(), response.message())
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) { e.printStackTrace() }
-            OpenWeatherResponse.ExceptionResponse(e.message)
-        }
-    }
-
     override suspend fun getDailyForecast(
         latitude: Double, longitude: Double
     ): OpenWeatherResponse {
@@ -72,9 +57,9 @@ object OpenWeatherRepository : OpenWeatherInterface {
         }
     }
 
-    override suspend fun getDailyForecast(city: String): OpenWeatherResponse {
+    override suspend fun getDailyForecast(city: String, nDays: Int): OpenWeatherResponse {
         return try {
-            val response = weatherApi.dailyForecast(city)
+            val response = weatherApi.dailyForecast(city, nDays)
 
             if (response.isSuccessful) {
                 OpenWeatherResponse.DataResponse(response.body())

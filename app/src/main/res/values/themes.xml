@@ -27,4 +27,9 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorAccent">@color/orange_700</item>
     </style>
+
+    <style name="ThemeOverlay.DailyForecast.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/colorOrangeLight</item>
+        <item name="appWidgetTextColor">@color/orange_700</item>
+    </style>
 </resources>

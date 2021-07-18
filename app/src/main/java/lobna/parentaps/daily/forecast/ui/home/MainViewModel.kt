@@ -19,7 +19,7 @@ import lobna.parentaps.daily.forecast.data.CityModel
 import lobna.parentaps.daily.forecast.data.DailyForecast
 import lobna.parentaps.daily.forecast.data.ForecastResponse
 import lobna.parentaps.daily.forecast.data.OpenWeatherResponse
-import lobna.parentaps.daily.forecast.repository.OpenWeatherRepository
+import lobna.parentaps.daily.forecast.repository.MainRepository
 import lobna.parentaps.daily.forecast.ui.CityAdapter
 import lobna.parentaps.daily.forecast.ui.CityInterface
 import lobna.parentaps.daily.forecast.utils.LocationUtils
@@ -38,7 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun init(fusedLocationClient: FusedLocationProviderClient) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = OpenWeatherRepository.getCities(getApplication())
+            val response = MainRepository.getCities(getApplication())
             withContext(Dispatchers.Main) {
                 if (response.isEmpty()) {
                     detectLocation(fusedLocationClient)
@@ -65,14 +65,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getData(latitude: Double, longitude: Double) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = OpenWeatherRepository.getDailyForecast(latitude, longitude)
+            val response = MainRepository.getDailyForecast(latitude, longitude)
             withContext(Dispatchers.Main) { bindResponse(response, true) }
         }
     }
 
     fun getData(city: String = "London, UK", saveCity: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = OpenWeatherRepository.getDailyForecast(city)
+            val response = MainRepository.getDailyForecast(city)
             withContext(Dispatchers.Main) { bindResponse(response, saveCity) }
         }
     }
@@ -87,7 +87,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 (response.data as? ForecastResponse)?.run {
                     viewModelScope.launch(Dispatchers.IO) {
                         isFavouriteObservable.set(
-                            OpenWeatherRepository.ifCityExists(getApplication(), city.id)
+                            MainRepository.ifCityExists(getApplication(), city.id)
                         )
                     }
                     cityObservable.set(city)
@@ -108,7 +108,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val alertDialog = builder.create()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val cities = OpenWeatherRepository.getCities(view.context)
+            val cities = MainRepository.getCities(view.context)
             withContext(Dispatchers.Main) {
                 val citiesRecycler = alertDialog.findViewById<RecyclerView>(R.id.cities_recycler)
                 citiesRecycler.adapter = CityAdapter(cities, object : CityInterface {
@@ -126,11 +126,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun favourite() {
         viewModelScope.launch(Dispatchers.IO) {
             if (isFavouriteObservable.get()) {
-                OpenWeatherRepository.deleteCity(getApplication(), cityObservable.get()!!)
+                MainRepository.deleteCity(getApplication(), cityObservable.get()!!)
                 isFavouriteObservable.set(false)
             } else {
                 val response =
-                    OpenWeatherRepository.saveCity(getApplication(), cityObservable.get()!!)
+                    MainRepository.saveCity(getApplication(), cityObservable.get()!!)
 
                 withContext(Dispatchers.Main) {
                     when (response) {

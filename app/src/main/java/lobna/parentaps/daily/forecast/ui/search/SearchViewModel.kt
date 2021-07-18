@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import lobna.parentaps.daily.forecast.data.CityModel
 import lobna.parentaps.daily.forecast.data.CityResponse
 import lobna.parentaps.daily.forecast.data.OpenWeatherResponse
-import lobna.parentaps.daily.forecast.repository.OpenWeatherRepository
+import lobna.parentaps.daily.forecast.repository.SearchRepository
 import lobna.parentaps.daily.forecast.ui.CityAdapter
 import lobna.parentaps.daily.forecast.ui.CityInterface
 import lobna.parentaps.daily.forecast.utils.SingleLiveEvent
@@ -50,7 +50,7 @@ class SearchViewModel : ViewModel() {
 
     fun search(context: Context, query: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = OpenWeatherRepository.getCities(query)
+            val response = SearchRepository.getCities(query)
             withContext(Dispatchers.Main) {
                 when (response) {
                     is OpenWeatherResponse.ErrorResponse ->

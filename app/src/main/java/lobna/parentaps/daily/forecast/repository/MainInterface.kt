@@ -4,7 +4,7 @@ import android.content.Context
 import lobna.parentaps.daily.forecast.data.CityModel
 import lobna.parentaps.daily.forecast.data.OpenWeatherResponse
 
-interface OpenWeatherInterface {
+interface MainInterface {
 
     suspend fun saveCity(context: Context, city: CityModel): OpenWeatherResponse
     suspend fun getCities(context: Context): List<CityModel>
@@ -12,7 +12,6 @@ interface OpenWeatherInterface {
     suspend fun deleteCity(context: Context, city: CityModel)
     suspend fun getCount(context: Context): Int
 
-    suspend fun getCities(city: String): OpenWeatherResponse
     suspend fun getDailyForecast(latitude: Double, longitude: Double): OpenWeatherResponse
-    suspend fun getDailyForecast(city: String): OpenWeatherResponse
+    suspend fun getDailyForecast(city: String, nDays: Int = 5): OpenWeatherResponse
 }
