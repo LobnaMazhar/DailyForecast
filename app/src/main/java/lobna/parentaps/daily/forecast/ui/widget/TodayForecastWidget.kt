@@ -51,7 +51,7 @@ internal fun updateAppWidget(
         val response = MainRepository.getCities(context)
         if (response.isNotEmpty()) {
             val city = response[0].name
-            val response = MainRepository.getDailyForecast(city, 1)
+            val response = MainRepository.getDailyForecast(context, city, 1)
             when (response) {
                 is OpenWeatherResponse.ErrorResponse, is OpenWeatherResponse.ExceptionResponse -> {
                 }

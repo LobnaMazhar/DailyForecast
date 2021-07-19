@@ -21,7 +21,7 @@ class SearchActivity : AppCompatActivity() {
         searchViewModel.onBackEvent.observe(this, { onBackPressed() })
         searchViewModel.selectCity.observe(this, {
             val data = Intent().apply {
-                putExtra("data", bundleOf(Pair("id", it.id), Pair("name", it.name)))
+                putExtra("data", bundleOf(Pair("name", it.name)))
             }
             setResult(RESULT_OK, data)
             finish()

@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import lobna.parentaps.daily.forecast.data.CityModel
+import lobna.parentaps.daily.forecast.data.DailyForecast
 import lobna.parentaps.daily.forecast.database.dao.OpenWeatherDao
 
-@Database(entities = [CityModel::class], version = 1)
+@Database(entities = [CityModel::class, DailyForecast::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class MyRoomDatabase : RoomDatabase() {
 
     companion object {

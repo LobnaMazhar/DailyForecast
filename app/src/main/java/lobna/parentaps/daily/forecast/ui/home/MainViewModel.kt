@@ -72,7 +72,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getData(city: String = "London, UK", saveCity: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = MainRepository.getDailyForecast(city)
+            val response = MainRepository.getDailyForecast(getApplication(), city)
             withContext(Dispatchers.Main) { bindResponse(response, saveCity) }
         }
     }
@@ -87,7 +87,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 (response.data as? ForecastResponse)?.run {
                     viewModelScope.launch(Dispatchers.IO) {
                         isFavouriteObservable.set(
-                            MainRepository.ifCityExists(getApplication(), city.id)
+                            MainRepository.ifCityExists(getApplication(), city.name)
                         )
                     }
                     cityObservable.set(city)
@@ -96,6 +96,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     days.clear()
                     days.addAll(list)
                     dayForecastAdapter.notifyDataSetChanged()
+
+                    // Cache data for offline usage if the city was a favourite
+                    if (isFavouriteObservable.get()) {
+                        cacheData()
+                    }
                 }
             }
         }
@@ -138,7 +143,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             getApplication<Application>().showToast(response.message)
                         is OpenWeatherResponse.ExceptionResponse ->
                             response.message?.run { getApplication<Application>().showToast(this) }
-                        is OpenWeatherResponse.DataResponse<*> -> isFavouriteObservable.set(true)
+                        is OpenWeatherResponse.DataResponse<*> -> {
+                            isFavouriteObservable.set(true)
+                            cacheData()
+                        }
                     }
                 }
             }
@@ -147,5 +155,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun search(view: View) {
         searchClick.postValue(true)
+    }
+
+    private fun cacheData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            days.forEach {
+                it.cityName = cityObservable.get()!!.name
+                MainRepository.saveDayForecast(getApplication(), it)
+            }
+        }
     }
 }
